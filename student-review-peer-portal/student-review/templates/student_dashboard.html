@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <header class="bg-white shadow mb-8">
+        <div class="container mx-auto flex justify-between items-center py-4 px-6">
+            <h1 class="text-2xl font-bold text-blue-600">Student Dashboard</h1>
+            <div class="flex gap-2">
+                <a href="{{ url_for('student_projects') }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none">Your Projects</a>
+                <a href="{{ url_for('student_reviews') }}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 focus:outline-none">Your Reviews</a>
+                <a href="/logout" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Logout</a>
+            </div>
+        </div>
+    </header>
+    <main class="container mx-auto px-4">
+        <div class="bg-white p-6 rounded shadow-md mb-8 max-w-2xl mx-auto">
+            <h2 class="text-xl font-semibold mb-4">Submit a New Project</h2>
+            <form method="POST">
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2" for="project_title">Project Title</label>
+                    <input type="text" name="project_title" id="project_title" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2" for="github_link">GitHub Link</label>
+                    <input type="url" name="github_link" id="github_link" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2" for="video_link">Video Link</label>
+                    <input type="url" name="video_link" id="video_link" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2" for="ppt_link">PPT Link</label>
+                    <input type="url" name="ppt_link" id="ppt_link" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2" for="documentation_link">Documentation Link</label>
+                    <input type="url" name="documentation_link" id="documentation_link" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2" for="description">Description</label>
+                    <textarea name="description" id="description" rows="3" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring" required></textarea>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 mb-2" for="guide_id">Select Guide</label>
+                    <select name="guide_id" id="guide_id" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring" required>
+                        <option value="">-- Select Guide --</option>
+                        {% for guide in guides %}
+                        <option value="{{ guide._id }}">{{ guide.username }} ({{ guide.email }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 mb-2" for="review_score">Reviews</label>
+                    <select name="review_score" id="review_score" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring" required>
+                        <option value="">-- Select Review  --</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">Submit Project</button>
+            </form>
+        </div>
+        <div id="projects-section" class="max-w-4xl mx-auto transition-all duration-300">
+            <h2 class="text-xl font-semibold mb-4 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a2 2 0 012-2h2a2 2 0 012 2v2m-6 4h6a2 2 0 002-2v-6a2 2 0 00-2-2h-2a2 2 0 00-2 2v6a2 2 0 002 2z" /></svg>Your Projects</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {% for project in projects %}
+                <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 border border-blue-100">
+                    <div class="flex items-center mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a2 2 0 012-2h2a2 2 0 012 2v2m-6 4h6a2 2 0 002-2v-6a2 2 0 00-2-2h-2a2 2 0 00-2 2v6a2 2 0 002 2z" /></svg>
+                        <h3 class="text-lg font-bold">{{ project.project_title }}</h3>
+                    </div>
+                    <p class="mb-2 text-gray-700">{{ project.description }}</p>
+                    <p class="mb-1"><span class="font-semibold">Guide:</span> 
+                        {% for guide in guides %}
+                            {% if guide._id|string == project.guide_id %}
+                                {{ guide.username }} ({{ guide.email }})
+                            {% endif %}
+                        {% endfor %}
+                    </p>
+                    {% if project.review_score %}
+                    <span class="inline-block bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded mb-2">Review: {{ project.review_score }}</span>
+                    {% endif %}
+                    <div class="flex flex-wrap gap-2 mt-2">
+                        {% if project.github_link %}<a href="{{ project.github_link }}" class="text-blue-500 hover:underline text-sm" target="_blank">GitHub</a>{% endif %}
+                        {% if project.video_link %}<a href="{{ project.video_link }}" class="text-blue-500 hover:underline text-sm" target="_blank">Video</a>{% endif %}
+                        {% if project.ppt_link %}<a href="{{ project.ppt_link }}" class="text-blue-500 hover:underline text-sm" target="_blank">PPT</a>{% endif %}
+                        {% if project.documentation_link %}<a href="{{ project.documentation_link }}" class="text-blue-500 hover:underline text-sm" target="_blank">Documentation</a>{% endif %}
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">Submitted on {{ project.created_at.strftime('%Y-%m-%d %H:%M') if project.created_at else '' }}</p>
+                </div>
+                {% else %}
+                <p class="text-gray-500">No projects submitted yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+        <div id="reviews-section" class="max-w-4xl mx-auto mt-10 hidden transition-all duration-300">
+            <h2 class="text-xl font-semibold mb-4 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 11V9a4 4 0 118 0v2a4 4 0 01-8 0zm-2 4a6 6 0 0112 0v2a6 6 0 01-12 0v-2z" /></svg>Your Reviews</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {% for review in reviews %}
+                <div class="bg-green-50 p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 border border-green-100">
+                    <div class="flex items-center mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 11V9a4 4 0 118 0v2a4 4 0 01-8 0zm-2 4a6 6 0 0112 0v2a6 6 0 01-12 0v-2z" /></svg>
+                        <h3 class="text-lg font-bold">Review</h3>
+                    </div>
+                    <p class="mb-1"><span class="font-semibold">Score:</span> {{ review.score }}</p>
+                    <p class="mb-1"><span class="font-semibold">Comments:</span> {{ review.comments }}</p>
+                    <p class="mb-1"><span class="font-semibold">Reviewer:</span> {{ review.reviewer_name }} ({{ review.reviewer_email }})</p>
+                    <p class="text-xs text-gray-500 mt-2">Reviewed on {{ review.created_at.strftime('%Y-%m-%d %H:%M') if review.created_at else '' }}</p>
+                </div>
+                {% else %}
+                <p class="text-gray-500">No reviews received yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+    <script>
+    function showTab(tab) {
+        const projectsSection = document.getElementById('projects-section');
+        const reviewsSection = document.getElementById('reviews-section');
+        const btnProjects = document.getElementById('btn-projects');
+        const btnReviews = document.getElementById('btn-reviews');
+        if (tab === 'projects') {
+            projectsSection.classList.remove('hidden');
+            reviewsSection.classList.add('hidden');
+            btnProjects.classList.add('ring', 'ring-blue-300');
+            btnReviews.classList.remove('ring', 'ring-green-300');
+        } else {
+            projectsSection.classList.add('hidden');
+            reviewsSection.classList.remove('hidden');
+            btnReviews.classList.add('ring', 'ring-green-300');
+            btnProjects.classList.remove('ring', 'ring-blue-300');
+        }
+    }
+    // Show projects by default
+    showTab('projects');
+    </script>
+</body>
+</html> 

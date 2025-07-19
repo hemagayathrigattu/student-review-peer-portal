@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Projects</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <header class="bg-white shadow mb-8">
+        <div class="container mx-auto flex justify-between items-center py-4 px-6">
+            <h1 class="text-2xl font-bold text-blue-600">Your Projects</h1>
+            <a href="/student_dashboard" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Back to Dashboard</a>
+        </div>
+    </header>
+    <main class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto mt-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {% for project in projects %}
+                <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 border border-blue-100">
+                    <div class="flex items-center mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a2 2 0 012-2h2a2 2 0 012 2v2m-6 4h6a2 2 0 002-2v-6a2 2 0 00-2-2h-2a2 2 0 00-2 2v6a2 2 0 002 2z" /></svg>
+                        <h3 class="text-lg font-bold">{{ project.project_title }}</h3>
+                    </div>
+                    <p class="mb-2 text-gray-700">{{ project.description }}</p>
+                    <p class="mb-1"><span class="font-semibold">Guide:</span> 
+                        {% for guide in guides %}
+                            {% if guide._id|string == project.guide_id %}
+                                {{ guide.username }} ({{ guide.email }})
+                            {% endif %}
+                        {% endfor %}
+                    </p>
+                    {% if project.review_score %}
+                    <span class="inline-block bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded mb-2">Review: {{ project.review_score }}</span>
+                    {% endif %}
+                    <div class="flex flex-wrap gap-2 mt-2">
+                        {% if project.github_link %}<a href="{{ project.github_link }}" class="text-blue-500 hover:underline text-sm" target="_blank">GitHub</a>{% endif %}
+                        {% if project.video_link %}<a href="{{ project.video_link }}" class="text-blue-500 hover:underline text-sm" target="_blank">Video</a>{% endif %}
+                        {% if project.ppt_link %}<a href="{{ project.ppt_link }}" class="text-blue-500 hover:underline text-sm" target="_blank">PPT</a>{% endif %}
+                        {% if project.documentation_link %}<a href="{{ project.documentation_link }}" class="text-blue-500 hover:underline text-sm" target="_blank">Documentation</a>{% endif %}
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">Submitted on {{ project.created_at.strftime('%Y-%m-%d %H:%M') if project.created_at else '' }}</p>
+                </div>
+                {% else %}
+                <p class="text-gray-500">No projects submitted yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+</body>
+</html> 

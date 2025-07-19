@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <header class="bg-white shadow mb-8">
+        <div class="container mx-auto flex justify-between items-center py-4 px-6">
+            <h1 class="text-2xl font-bold text-blue-600">Guide Dashboard</h1>
+            <a href="/logout" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Logout</a>
+        </div>
+    </header>
+    <main class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-xl font-semibold mb-4">Assigned Student Projects</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {% for project in projects %}
+                <div class="bg-white p-4 rounded shadow">
+                    <h3 class="text-lg font-bold mb-2">{{ project.project_title }}</h3>
+                    <p class="mb-2 text-gray-700">{{ project.description }}</p>
+                    <p class="mb-1"><span class="font-semibold">Student:</span> {{ project.student_name }}</p>
+                    {% if project.review_score %}
+                    <span class="inline-block bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded mb-2">Review: {{ project.review_score }}</span>
+                    {% endif %}
+                    {% if project.github_link %}<p><a href="{{ project.github_link }}" class="text-blue-500 hover:underline" target="_blank">GitHub</a></p>{% endif %}
+                    {% if project.video_link %}<p><a href="{{ project.video_link }}" class="text-blue-500 hover:underline" target="_blank">Video</a></p>{% endif %}
+                    {% if project.ppt_link %}<p><a href="{{ project.ppt_link }}" class="text-blue-500 hover:underline" target="_blank">PPT</a></p>{% endif %}
+                    {% if project.documentation_link %}<p><a href="{{ project.documentation_link }}" class="text-blue-500 hover:underline" target="_blank">Documentation</a></p>{% endif %}
+                    <p class="text-xs text-gray-500 mt-2">Submitted on {{ project.created_at.strftime('%Y-%m-%d %H:%M') if project.created_at else '' }}</p>
+                    <!-- Placeholder for review actions -->
+                    <div class="mt-4">
+                        <a href="{{ url_for('guide_review', project_id=project._id) }}" class="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600">Review Student</a>
+                    </div>
+                </div>
+                {% else %}
+                <p class="text-gray-500">No projects assigned yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+</body>
+</html> 

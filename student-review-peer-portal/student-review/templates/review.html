@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Review</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
+        <h2 class="text-2xl font-bold mb-6 text-center">Review {{ to_user.username }}</h2>
+        {% if project %}
+        <div class="mb-4 p-4 bg-gray-50 rounded">
+            <h3 class="font-semibold">Project: {{ project.project_title }}</h3>
+            <p class="text-gray-700">{{ project.description }}</p>
+            {% if project.github_link %}<p><a href="{{ project.github_link }}" class="text-blue-500 hover:underline" target="_blank">GitHub</a></p>{% endif %}
+            {% if project.video_link %}<p><a href="{{ project.video_link }}" class="text-blue-500 hover:underline" target="_blank">Video</a></p>{% endif %}
+            {% if project.ppt_link %}<p><a href="{{ project.ppt_link }}" class="text-blue-500 hover:underline" target="_blank">PPT</a></p>{% endif %}
+            {% if project.documentation_link %}<p><a href="{{ project.documentation_link }}" class="text-blue-500 hover:underline" target="_blank">Documentation</a></p>{% endif %}
+        </div>
+        {% endif %}
+        <form method="POST">
+            <div class="mb-4">
+                <label class="block text-gray-700 mb-2" for="score">Review</label>
+                <select name="score" id="score" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring" required>
+                    <option value="">-- Select --</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+            </div>
+            <div class="mb-6">
+                <label class="block text-gray-700 mb-2" for="comments">Comments</label>
+                <textarea name="comments" id="comments" rows="4" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring" required></textarea>
+            </div>
+            <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">Submit Review</button>
+        </form>
+        <!--<a href="/dashboard" class="block mt-4 text-center text-blue-500 hover:underline">Back to Dashboard</a> 
+    </div>-->
+</body>
+</html> 

@@ -1,0 +1,29 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto py-10">
+        <h2 class="text-3xl font-bold mb-6 text-center">Dashboard</h2>
+        <div class="bg-white p-6 rounded shadow-md max-w-2xl mx-auto">
+            <h3 class="text-xl font-semibold mb-4 text-gray-700">Users to Review ({{ 'Guides' if current_role == 'student' else 'Students' }})</h3>
+            {% if users %}
+            <ul>
+                {% for user in users %}
+                <li class="flex items-center justify-between py-2 border-b">
+                    <span class="font-medium">{{ user.username }} ({{ user.email }})</span>
+                    <a href="/review/{{ user._id }}" class="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600">Review</a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-gray-500">No users to review.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>  -->
